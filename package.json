@@ -1,0 +1,19 @@
+{
+  "name": "nativescript-webview-interface",
+  "version": "1.0.0",
+  "description": "Nativescript plugin for bidirectional communication between webView and android/ios.",
+  "main": "index.js",
+  "nativescript": {},
+  "keywords": [
+    "nativescript",
+    "webview",
+    "android",
+    "ios"
+  ],
+  "author": {
+    "name": "Shripal Soni",
+    "email": "shripalsoni04@gmail.com",
+    "website": "www.shripalsoni.com"
+  },
+  "license": "ISC"
+}
