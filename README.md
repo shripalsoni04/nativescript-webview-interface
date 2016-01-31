@@ -118,7 +118,7 @@ Callback will be executed with the data sent from webView in any format.
 #### emit(eventOrCmdName: string, data: any)
 Use this method to emit any event/command from native app to webView with data in any format.
 
-#### callJSFunction(webViewFunctionName: string, args?: any[], (result: any) => void)
+#### callJSFunction(webViewFunctionName: string, args: any[], callback: (result: any) => void)
 Use this method to call to any javascript function in global scope in webView.
 
 Arguments are optional. But if supplied, must be in array format.
