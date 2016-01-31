@@ -2,7 +2,7 @@
 Nativescript Plugin for bi-directional communication between WebView and Android/iOS
 
 ## Installation
-From the terminal go to your app's root folder and execute:
+From the terminal, go to your app's root folder and execute:
 ```
 tns plugin add nativescript-webview-interface
 ```
@@ -112,6 +112,7 @@ API Methods of WebViewInterface Class
 
 #### on(eventOrCmdName: string, callback: (eventData: any) => void)
 Use this method to assign listener to any event/command emitted from webView.
+
 Callback will be executed with the data sent from webView in any format. 
 
 #### emit(eventOrCmdName: string, data: any)
@@ -119,7 +120,9 @@ Use this method to emit any event/command from native app to webView with data i
 
 #### callJSFunction(webViewFunctionName: string, args?: any[], (result: any) => void)
 Use this method to call to any javascript function in global scope in webView.
+
 Arguments are optional. But if supplied, must be in array format.
+
 The callback will be executed with the result returned by the called JS function. If promise is returned, the resolved value will come as result.
 
 ### WebView API
@@ -128,6 +131,7 @@ API Methods available in `window.nsWebViewInterface` global variable.
 
 #### on(eventOrCmdName: string, callback: (eventData: any) => void)
 Use this method to assign listener to  any event/command emited from native app.
+
 Callback will be executed with the data sent from native app in any format.
 
 #### emit(eventorCmdName) 
