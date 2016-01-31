@@ -134,5 +134,5 @@ Use this method to assign listener to  any event/command emited from native app.
 
 Callback will be executed with the data sent from native app in any format.
 
-#### emit(eventorCmdName) 
+#### emit(eventorCmdName: string, data: any) 
 Use this method to emit any event/command from webView to native app with data in any format.
