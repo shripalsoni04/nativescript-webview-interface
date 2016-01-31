@@ -1,2 +1,134 @@
-# nativescript-webview-interface
-Plugin for bi-directional communication between webView and android/ios
+# Nativescript-WebView-Interface
+Nativescript Plugin for bi-directional communication between WebView and Android/iOS
+
+## Installation
+From the terminal go to your app's root folder and execute:
+```
+tns plugin add nativescript-webview-interface
+```
+
+Once the plugin is installed, you need to copy plugin file for webView into your webView content folder.
+e.g
+```
+cp node_modules/nativescript-webview-interface/www/nativescript-webview-interface.js app/www/lib/
+```
+
+## Usage
+For a quick start, you can check this Demo App ([Comming Soon](#))
+
+### Inside Native App
+
+Insert a `web-view` somewhere in your page.
+```xml
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded">
+....
+<web-view id="webView" src="~/www/index.html"></web-view>
+....
+</Page>
+```
+
+Initialize `WebViewInterface` Plugin in your javascript file.
+```javascript
+var webViewInterfaceModule = require('nativescript-webview-interface');
+var oWebViewInterface;
+
+function pageLoaded(args){
+    page = args.object;
+    setupWebViewInterface(page) 
+}
+
+// Initializes plugin with a webView
+function setupWebViewInterface(page){
+    var webView = page.getViewById('webView');
+    oWebViewInterface = new webViewInterfaceModule.WebViewInterface(webView);
+}
+```
+
+Use any [API Method](#native-app-api) of WebViewInterface Class
+```javascript
+function handleEventFromWebView(){
+    oWebViewInterface.on('anyEvent', function(eventData){
+        // perform action on event
+    });
+}
+
+function emitEventToWebView(){
+    oWebViewInterface.emit('anyEvent', eventData);
+}
+
+function callJSFunction(){
+    oWebViewInterface.callJSFunction('functionName', args, function(result){
+        
+    });
+}
+```
+
+If you want to emit an event or call a JS function on load of the page, you need to call all such code once webView is loaded
+```javascript
+webView.on('loadFinished', (args) => {
+    if (!args.error) {
+        // emit event to webView or call JS function of webView
+    }
+});
+```
+
+### Inside WebView
+
+Import `nativescript-webview-interface.js` in your html page.
+```html
+<html>
+    <head></head>
+    <body>
+        <script src="path/to/nativescript-webview-interface.js"></script>
+        <script src="path/to/your-custom-script.js"></script>        
+    </body>
+</html>
+```
+
+Use any [API Method](#webview-api) of `window.nsWebViewInterface` inside webview
+
+```javascript
+var oWebViewInterface = window.nsWebViewInterface;
+
+// register listener for any event from native app
+oWebViewInterface.on('anyEvent', function(eventData){
+    
+});
+
+// emit event to native app
+oWebViewInterface.emit('anyEvent', eventData);
+
+// function which can be called by native app
+window.functionCalledByNative = function(arg1, arg2){
+    // do any processing
+    return dataOrPromise;
+}
+```
+## API
+
+### Native App API
+
+API Methods of WebViewInterface Class
+
+#### on(eventOrCmdName: string, callback: (eventData: any) => void)
+Use this method to assign listener to any event/command emitted from webView.
+Callback will be executed with the data sent from webView in any format. 
+
+#### emit(eventOrCmdName: string, data: any)
+Use this method to emit any event/command from native app to webView with data in any format.
+
+#### callJSFunction(webViewFunctionName: string, args?: any[], (result: any) => void)
+Use this method to call to any javascript function in global scope in webView.
+Arguments are optional. But if supplied, must be in array format.
+The callback will be executed with the result returned by the called JS function. If promise is returned, the resolved value will come as result.
+
+### WebView API
+
+API Methods available in `window.nsWebViewInterface` global variable.
+
+#### on(eventOrCmdName: string, callback: (eventData: any) => void)
+Use this method to assign listener to  any event/command emited from native app.
+Callback will be executed with the data sent from native app in any format.
+
+#### emit(eventorCmdName) 
+Use this method to emit any event/command from webView to native app with data in any format.
