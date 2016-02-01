@@ -14,7 +14,7 @@ cp node_modules/nativescript-webview-interface/www/nativescript-webview-interfac
 ```
 
 ## Usage
-For a quick start, you can check this Demo App ([Comming Soon](#))
+For a quick start, you can check this [Demo App](https://github.com/shripalsoni04/nativescript-webview-interface-demo)
 
 ### Inside Native App
 
@@ -134,5 +134,5 @@ Use this method to assign listener to  any event/command emited from native app.
 
 Callback will be executed with the data sent from native app in any format.
 
-#### emit(eventorCmdName: string, data: any) 
+#### emit(eventOrCmdName: string, data: any) 
 Use this method to emit any event/command from webView to native app with data in any format.
