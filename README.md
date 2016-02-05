@@ -14,7 +14,7 @@ cp node_modules/nativescript-webview-interface/www/nativescript-webview-interfac
 ```
 
 ## Usage
-For a quick start, you can check this [Demo App](https://github.com/shripalsoni04/nativescript-webview-interface-demo)
+For a quick start, you can check this [Demo App](https://github.com/shripalsoni04/nativescript-webview-interface-demo) and [Blog Post](http://shripalsoni.com/blog/nativescript-webview-native-bi-directional-communication/)
 
 ### Inside Native App
 
