@@ -37,7 +37,7 @@ var NSWebViewinterface = (function () {
         }
     };
     
-    /**
+   /**
      * Handles JS function calls by android/ios. This function is called from nativescript.
      * Result value of JS function call can be promise or any other data.
      * @param   {number}    reqId - Internal communication id
@@ -46,8 +46,9 @@ var NSWebViewinterface = (function () {
      */
     NSWebViewinterface.prototype._callJSFunction = function (reqId, functionName, args) {
         var _this = this;
-        if (functionName && window[functionName]) {
-            var retnVal = window[functionName].apply(window, args);
+        var resolvedFn = _this._getResolvedFunction(functionName);
+        if(resolvedFn){
+            var retnVal = resolvedFn.apply(window, args);
             if (retnVal && retnVal.then) {
                 retnVal.then(function (value) {
                     _this._sendJSCallResponse(reqId, value);
@@ -57,7 +58,29 @@ var NSWebViewinterface = (function () {
                 this._sendJSCallResponse(reqId, retnVal);
             }
         }
-    };
+    }
+    
+    /**
+     * Resolves a function, if the function to be executed is in deep object chain.
+     * e.g If we want to execute a function 'parent.child.child.fn' from native app, 
+     * this function will extract fn from the object chain. 
+     * We can do it by using eval also, but as there is a way, why to invite unknown security risks? 
+     * 
+     */
+    NSWebViewinterface.prototype._getResolvedFunction = function(functionName){
+        if(functionName && (functionName = functionName.trim()).length){
+            functionName = functionName.indexOf('window.') === 0 ? functionName.replace('window.', '') : functionName;
+            var arrFnPath = functionName.split('.');
+            var fn = window;
+            for(var i =0; i < arrFnPath.length; i++){
+                if(!fn[arrFnPath[i]]){
+                    break;
+                }
+                fn = fn[arrFnPath[i]]; 
+            }
+            return fn;
+        }
+    }
     
     /**
      * Returns JS Call response by emitting internal _jsCallRespone event
