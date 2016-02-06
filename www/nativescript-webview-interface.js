@@ -74,6 +74,7 @@ var NSWebViewinterface = (function () {
             var fn = window;
             for(var i =0; i < arrFnPath.length; i++){
                 if(!fn[arrFnPath[i]]){
+                    fn = null;
                     break;
                 }
                 fn = fn[arrFnPath[i]]; 
