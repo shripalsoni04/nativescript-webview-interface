@@ -123,7 +123,7 @@ Use this method to call to any javascript function in global scope in webView.
 
 Arguments are optional. But if supplied, must be in array format.
 
-If the function is successfully executed, the successHandler will be called with the result returned by the JS Function. If promise is returned from the JS Function, the resolved value will come as result.
+If the function is successfully executed, the successHandler will be called with the result returned by the JS Function. If promise is returned from the JS Function, the resolved value will come as result.<br/>
 If the function execution generates any error, the errorHandler will be called with the error.
 
 ### WebView API
