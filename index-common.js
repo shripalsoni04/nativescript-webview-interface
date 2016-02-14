@@ -26,18 +26,26 @@ function WebViewInterface(webView) {
     this.eventListenerMap = {};
     
     /**
-     * Mapping of js call request id and its response handler. 
-     * Based on this mapping, the registered handler will be called 
-     * on response of a js call
+     * Mapping of js call request id and its success handler. 
+     * Based on this mapping, the registered success handler will be called 
+     * on successful response from the js call
      */
-    this.jsCallReqIdCallbackMap = {};
+    this.jsCallReqIdSuccessCallbackMap = {};
+    
+    /**
+     * Mapping of js call request id and its error handler. 
+     * Based on this mapping, the error handler will be called 
+     * on error from the js call
+     */
+    this.jsCallReqIdErrorCallbackMap = {};
     
     /**
      * Clears mappings of callbacks on webView unload
      */
     webView.on('unloaded', function () {
         this.eventListenerMap = null;
-        this.jsCallReqIdCallbackMap = null;
+        this.jsCallReqIdSuccessCallbackMap = null;
+        this.jsCallReqIdErrorCallbackMap = null;
     }.bind(this));
 }
 
@@ -52,7 +60,7 @@ WebViewInterface.prototype._prepareEmitEventJSCall = function (eventName, data) 
 /**
  * Prepares call to a function in webView, which calls the specified function in the webView
  */
-WebViewInterface.prototype._prepareJSFunctionCall = function (functionName, arrArgs, callback) {
+WebViewInterface.prototype._prepareJSFunctionCall = function (functionName, arrArgs, successHandler, errorHandler) {
     arrArgs = arrArgs || [];
     
     // converts non array argument to array
@@ -61,7 +69,8 @@ WebViewInterface.prototype._prepareJSFunctionCall = function (functionName, arrA
     }
     var strArgs = JSON.stringify(arrArgs);
     var reqId = ++WebViewInterface.cntJSCallReqId;
-    this.jsCallReqIdCallbackMap[reqId] = callback;
+    this.jsCallReqIdSuccessCallbackMap[reqId] = successHandler;
+    this.jsCallReqIdErrorCallbackMap[reqId] = errorHandler;
     return 'window.nsWebViewInterface._callJSFunction(' + reqId + ',"' + functionName + '",' + strArgs + ');'
 }
 
@@ -74,7 +83,14 @@ WebViewInterface.prototype._onWebViewEvent = function (eventName, data) {
     // in case of JS call result, eventName will be _jsCallResponse
     if (eventName === '_jsCallResponse') {
         var reqId = oData.reqId;
-        var callback = this.jsCallReqIdCallbackMap[reqId];
+        var callback;
+        
+        if(oData.isError){
+            callback = this.jsCallReqIdErrorCallbackMap[reqId];
+        }else{
+            callback = this.jsCallReqIdSuccessCallbackMap[reqId];
+        }
+        
         if (callback) {
             callback(oData.response);
         }
@@ -118,8 +134,8 @@ WebViewInterface.prototype.emit = function (eventName, data) {
  * @param   {any[]}     args - Arguments of the function
  * @param   {function}  callback - Function to call on result from webView      
  */
-WebViewInterface.prototype.callJSFunction = function (functionName, args, callback) {
-    var strJSFunction = this._prepareJSFunctionCall(functionName, args, callback);
+WebViewInterface.prototype.callJSFunction = function (functionName, args, successHandler, errorHandler) {
+    var strJSFunction = this._prepareJSFunctionCall(functionName, args, successHandler, errorHandler);
     this._executeJS(strJSFunction);
 };
     

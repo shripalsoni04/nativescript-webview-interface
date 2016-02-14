@@ -52,6 +52,8 @@ var NSWebViewinterface = (function () {
             if (retnVal && retnVal.then) {
                 retnVal.then(function (value) {
                     _this._sendJSCallResponse(reqId, value);
+                }, function(error){
+                    _this._sendJSCallResponse(reqId, error, true);
                 });
             }
             else {
@@ -86,10 +88,11 @@ var NSWebViewinterface = (function () {
     /**
      * Returns JS Call response by emitting internal _jsCallRespone event
      */
-    NSWebViewinterface.prototype._sendJSCallResponse = function (reqId, response) {
+    NSWebViewinterface.prototype._sendJSCallResponse = function (reqId, response, isError) {
         var oResponse = {
             reqId: reqId,
-            response: response || null
+            response: response || null,
+            isError: !!isError
         };
         this.emit('_jsCallResponse', oResponse);
     };

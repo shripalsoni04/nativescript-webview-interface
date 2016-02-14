@@ -118,12 +118,13 @@ Callback will be executed with the data sent from webView in any format.
 #### emit(eventOrCmdName: string, data: any)
 Use this method to emit any event/command from native app to webView with data in any format.
 
-#### callJSFunction(webViewFunctionName: string, args: any[], callback: (result: any) => void)
+#### callJSFunction(webViewFunctionName: string, args: any[], successHandler: (result: any) => void, errorHandler: (error: any) => void)
 Use this method to call to any javascript function in global scope in webView.
 
 Arguments are optional. But if supplied, must be in array format.
 
-The callback will be executed with the result returned by the called JS function. If promise is returned, the resolved value will come as result.
+If the function is successfully executed, the successHandler will be called with the result returned by the JS Function. If promise is returned from the JS Function, the resolved value will come as result.
+If the function execution generates any error, the errorHandler will be called with the error.
 
 ### WebView API
 
