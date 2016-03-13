@@ -40,13 +40,24 @@ function WebViewInterface(webView) {
     this.jsCallReqIdErrorCallbackMap = {};
     
     /**
+     * Web-view instance unique id to handle scenarios of multiple webview on single page.
+     */
+    this.id = ++WebViewInterface.cntWebViewId;
+    
+    /**
      * Clears mappings of callbacks on webView unload
      */
-    webView.on('unloaded', function () {
+    webView.on('unloaded', function () {    
         this.eventListenerMap = null;
         this.jsCallReqIdSuccessCallbackMap = null;
         this.jsCallReqIdErrorCallbackMap = null;
+        delete WebViewInterface.webViewInterfaceIdMap[this.id];
     }.bind(this));
+    
+    /**
+     * Maintaining mapping of webview instance and its id, to handle scenarios of multiple webview on single page.
+     */
+    WebViewInterface.webViewInterfaceIdMap[this.id] = this;
 }
 
 /**
@@ -68,7 +79,8 @@ WebViewInterface.prototype._prepareJSFunctionCall = function (functionName, arrA
         arrArgs = [arrArgs];
     }
     var strArgs = JSON.stringify(arrArgs);
-    var reqId = ++WebViewInterface.cntJSCallReqId;
+    // creating id with combination of web-view id and req id
+    var reqId = '"'+this.id+'#'+ (++WebViewInterface.cntJSCallReqId)+'"';
     this.jsCallReqIdSuccessCallbackMap[reqId] = successHandler;
     this.jsCallReqIdErrorCallbackMap[reqId] = errorHandler;
     return 'window.nsWebViewInterface._callJSFunction(' + reqId + ',"' + functionName + '",' + strArgs + ');'
@@ -82,7 +94,7 @@ WebViewInterface.prototype._onWebViewEvent = function (eventName, data) {
     
     // in case of JS call result, eventName will be _jsCallResponse
     if (eventName === '_jsCallResponse') {
-        var reqId = oData.reqId;
+        var reqId = '"'+oData.reqId+'"';
         var callback;
         
         if(oData.isError){
@@ -143,6 +155,8 @@ WebViewInterface.prototype.callJSFunction = function (functionName, args, succes
  * Counter to create unique requestId for each JS call to webView.
  */
 WebViewInterface.cntJSCallReqId = 0;
+WebViewInterface.cntWebViewId = 0;
+WebViewInterface.webViewInterfaceIdMap = {};
 
 exports.WebViewInterface = WebViewInterface;
 exports.parseJSON = parseJSON;

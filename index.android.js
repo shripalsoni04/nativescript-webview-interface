@@ -10,12 +10,22 @@
         /**
          * On call from webView to android, this function is called from handleEventFromWebView method of WebViewInerface class
          */
-        onWebViewEvent: function(eventName, jsonData){
+        onWebViewEvent: function(webViewId, eventName, jsonData){
+            // getting webviewInterface object by webViewId from static map.
+            var oWebViewInterface = getWebViewIntefaceObjByWebViewId(webViewId);
             oWebViewInterface._onWebViewEvent(eventName, jsonData);
         }
     });
     
-    return new AndroidWebViewInterface();
+    // creating androidWebViewInterface with unique web-view id.
+    return new AndroidWebViewInterface(new java.lang.String(''+oWebViewInterface.id));
+ }
+ 
+ /**
+  * Returns webViewInterface object mapped with the passed webViewId.
+  */
+ function getWebViewIntefaceObjByWebViewId(webViewId){
+     return common.WebViewInterface.webViewInterfaceIdMap[webViewId];
  }
  
  /**
