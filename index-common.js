@@ -45,16 +45,6 @@ function WebViewInterface(webView) {
     this.id = ++WebViewInterface.cntWebViewId;
     
     /**
-     * Clears mappings of callbacks on webView unload
-     */
-    webView.on('unloaded', function () {    
-        this.eventListenerMap = null;
-        this.jsCallReqIdSuccessCallbackMap = null;
-        this.jsCallReqIdErrorCallbackMap = null;
-        delete WebViewInterface.webViewInterfaceIdMap[this.id];
-    }.bind(this));
-    
-    /**
      * Maintaining mapping of webview instance and its id, to handle scenarios of multiple webview on single page.
      */
     WebViewInterface.webViewInterfaceIdMap[this.id] = this;
@@ -150,7 +140,18 @@ WebViewInterface.prototype.callJSFunction = function (functionName, args, succes
     var strJSFunction = this._prepareJSFunctionCall(functionName, args, successHandler, errorHandler);
     this._executeJS(strJSFunction);
 };
-    
+
+/**
+ * Clears mappings of callbacks and webview.
+ * This needs to be called in navigatedFrom event handler in page where webviewInterface plugin is used.
+ */
+WebViewInterface.prototype.destroy = function(){
+    this.eventListenerMap = null;
+    this.jsCallReqIdSuccessCallbackMap = null;
+    this.jsCallReqIdErrorCallbackMap = null;
+    delete WebViewInterface.webViewInterfaceIdMap[this.id]; 
+};
+
 /**
  * Counter to create unique requestId for each JS call to webView.
  */
