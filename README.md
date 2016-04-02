@@ -126,6 +126,9 @@ Arguments are optional. But if supplied, must be in array format.
 If the function is successfully executed, the successHandler will be called with the result returned by the JS Function. If promise is returned from the JS Function, the resolved value will come as result.<br/>
 If the function execution generates any error, the errorHandler will be called with the error.
 
+#### destroy()
+Use this method to clean up webview resources (eventListeners) to avoid memory leak.
+
 ### WebView API
 
 API Methods available in `window.nsWebViewInterface` global variable.
