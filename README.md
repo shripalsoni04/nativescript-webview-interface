@@ -127,7 +127,7 @@ If the function is successfully executed, the successHandler will be called with
 If the function execution generates any error, the errorHandler will be called with the error.
 
 #### destroy()
-Use this method to clean up webview resources (eventListeners) to avoid memory leak.
+Use this method to clean up webviewInterface resources (eventListeners) to avoid memory leak.
 
 ### WebView API
 
