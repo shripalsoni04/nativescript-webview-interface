@@ -110,15 +110,15 @@ window.functionCalledByNative = function(arg1, arg2){
 
 API Methods of WebViewInterface Class
 
-#### on(eventOrCmdName: string, callback: (eventData: any) => void)
+#### on(eventOrCmdName: string, callback: (eventData: any) => void): void
 Use this method to assign listener to any event/command emitted from webView.
 
 Callback will be executed with the data sent from webView in any format. 
 
-#### emit(eventOrCmdName: string, data: any)
+#### emit(eventOrCmdName: string, data: any): void
 Use this method to emit any event/command from native app to webView with data in any format.
 
-#### callJSFunction(webViewFunctionName: string, args: any[], successHandler: (result: any) => void, errorHandler: (error: any) => void)
+#### callJSFunction(webViewFunctionName: string, args: any[], successHandler: (result: any) => void, errorHandler: (error: any) => void): void
 Use this method to call to any javascript function in global scope in webView.
 
 Arguments are optional. But if supplied, must be in array format.
@@ -126,17 +126,17 @@ Arguments are optional. But if supplied, must be in array format.
 If the function is successfully executed, the successHandler will be called with the result returned by the JS Function. If promise is returned from the JS Function, the resolved value will come as result.<br/>
 If the function execution generates any error, the errorHandler will be called with the error.
 
-#### destroy()
+#### destroy(): void
 Use this method to clean up webviewInterface resources (eventListeners) to avoid memory leak.
 
 ### WebView API
 
 API Methods available in `window.nsWebViewInterface` global variable.
 
-#### on(eventOrCmdName: string, callback: (eventData: any) => void)
+#### on(eventOrCmdName: string, callback: (eventData: any) => void): void
 Use this method to assign listener to  any event/command emited from native app.
 
 Callback will be executed with the data sent from native app in any format.
 
-#### emit(eventOrCmdName: string, data: any) 
+#### emit(eventOrCmdName: string, data: any): void 
 Use this method to emit any event/command from webView to native app with data in any format.
