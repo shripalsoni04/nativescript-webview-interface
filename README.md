@@ -1,3 +1,6 @@
+[![npm](https://img.shields.io/npm/v/nativescript-webview-interface.svg)](https://www.npmjs.com/package/nativescript-webview-interface)
+[![npm](https://img.shields.io/npm/dt/nativescript-webview-interface.svg?label=npm%20downloads)](https://www.npmjs.com/package/nativescript-webview-interface)
+
 # Nativescript-WebView-Interface
 Nativescript Plugin for bi-directional communication between WebView and Android/iOS
 
