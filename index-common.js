@@ -121,6 +121,29 @@ WebViewInterface.prototype.on = function (eventName, callback) {
 };
 
 /**
+ * Deregisters handler for event/command emitted from webview
+ * @param   {string}    eventName - Any event name except reserved '_jsCallResponse'
+ * @param   {function}  callback - Callback function to be executed on event/command receive.
+ **/
+WebViewInterface.prototype.off = function (eventName, callback) {
+    if(eventName === '_jsCallResponse'){
+        throw new Error('_jsCallResponse eventName is reserved for internal use. You cannot deattach listeners to it.');
+    }
+
+    if (!this.eventListenerMap[eventName] || this.eventListenerMap[eventName].length === 0) {
+      return;
+    }
+
+    if (callback) {
+      this.eventListenerMap[eventName] = this.eventListenerMap[eventName].filter(function(oldCallback) {
+        return oldCallback !== callback;
+      });
+    } else {
+      delete this.eventListenerMap[eventName];
+    }
+};
+
+/**
  * Emits event/command with payload to webView.
  * @param   {string}    eventName - Any event name
  * @param   {any}       data - Payload to send wiht event/command
