@@ -118,6 +118,11 @@ Use this method to assign listener to any event/command emitted from webView.
 
 Callback will be executed with the data sent from webView in any format. 
 
+#### off(eventOrCmdName: string, callback?: (eventData: any) => void): void
+Use this method to de-register listener of any event/command emitted from webView.
+
+If callback is not set, all the event listeners for this event will be de-registered.
+
 #### emit(eventOrCmdName: string, data: any): void
 Use this method to emit any event/command from native app to webView with data in any format.
 
