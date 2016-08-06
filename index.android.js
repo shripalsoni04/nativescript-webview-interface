@@ -34,19 +34,26 @@
  var WebViewInterface = (function(_super){
     __extends(WebViewInterface, _super);
     
-    function WebViewInterface(webView){
+    function WebViewInterface(webView, src){
         _super.call(this, webView);
-        this._initWebView(); 
+        this._initWebView(src); 
     }
     
     /**
      * Initializes webView for communication between android and webView.
      */
-    WebViewInterface.prototype._initWebView = function(){
+    WebViewInterface.prototype._initWebView = function(src){
         var oJSInterface =  getAndroidJSInterface(this);
         var androidSettings = this.webView.android.getSettings();
         androidSettings.setJavaScriptEnabled(true);
         this.webView.android.addJavascriptInterface(oJSInterface, 'androidWebViewInterface');
+
+        // If src is provided, then setting it.
+        // To make javascriptInterface available in web-view, it should be set before 
+        // web-view's loadUrl method is called. So setting src after javascriptInterface is set.
+        if(src){
+            this.webView.src = src;
+        }
     };
     
     /**

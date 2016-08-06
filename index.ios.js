@@ -6,9 +6,12 @@
  var WebViewInterface = (function(_super){
     __extends(WebViewInterface, _super);
     
-    function WebViewInterface(webView){
+    function WebViewInterface(webView, src){
         _super.call(this, webView);
         this._interceptCallsFromWebview();
+        if(src){
+            this.webView.src = src;
+        }
     }
     
     /**

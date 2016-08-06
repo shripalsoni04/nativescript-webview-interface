@@ -25,7 +25,7 @@ Insert a `web-view` somewhere in your page.
 ```xml
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="pageLoaded">
 ....
-<web-view id="webView" src="~/www/index.html"></web-view>
+<web-view id="webView"></web-view>
 ....
 </Page>
 ```
@@ -43,9 +43,11 @@ function pageLoaded(args){
 // Initializes plugin with a webView
 function setupWebViewInterface(page){
     var webView = page.getViewById('webView');
-    oWebViewInterface = new webViewInterfaceModule.WebViewInterface(webView);
+    oWebViewInterface = new webViewInterfaceModule.WebViewInterface(webView, '~/www/index.html');
 }
 ```
+**Note**: Please note in above example that, we have not set **src** in template and we have passed it in **constructor** of *WebViewInterface*. This is recommended way to use this plugin to avoid issue
+of communication from web-view to android not working sometimes on some devices.
 
 Use any [API Method](#native-app-api) of WebViewInterface Class
 ```javascript
@@ -111,7 +113,14 @@ window.functionCalledByNative = function(arg1, arg2){
 
 ### Native App API
 
-API Methods of WebViewInterface Class
+**Constructor**
+
+#### WebViewInterface(webView: WebView, src?: string)
+**webView** is an instance of nativescript [web-view](https://docs.nativescript.org/cookbook/ui/web-view). 
+
+**src** is the url/local path to be loaded in web-view. If it is set, then you don't need to set it in *src* attribute in xml file. For proper funcioning of web-view to native communication on all device's it is **recommended** to set src here.
+
+**API Methods of WebViewInterface Class**
 
 #### on(eventOrCmdName: string, callback: (eventData: any) => void): void
 Use this method to assign listener to any event/command emitted from webView.
