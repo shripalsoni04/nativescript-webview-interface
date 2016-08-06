@@ -113,14 +113,14 @@ window.functionCalledByNative = function(arg1, arg2){
 
 ### Native App API
 
-**Constructor**
+*Constructor:*
 
 #### WebViewInterface(webView: WebView, src?: string)
 **webView** is an instance of nativescript [web-view](https://docs.nativescript.org/cookbook/ui/web-view). 
 
-**src** is the url/local path to be loaded in web-view. If it is set, then you don't need to set it in *src* attribute in xml file. For proper funcioning of web-view to native communication on all device's it is **recommended** to set src here.
+**src** is the url/local path to be loaded in web-view. If it is set, then you don't need to set it in *src* attribute in xml file. For proper functioning of web-view to native communication on all device's it is **recommended** to set src here.
 
-**API Methods of WebViewInterface Class**
+*API Methods of WebViewInterface Class:*
 
 #### on(eventOrCmdName: string, callback: (eventData: any) => void): void
 Use this method to assign listener to any event/command emitted from webView.
