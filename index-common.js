@@ -54,7 +54,7 @@ function WebViewInterface(webView) {
  * Prepares call to a function in webView, which handles native event/command calls
  */
 WebViewInterface.prototype._prepareEmitEventJSCall = function (eventName, data) {
-    data = typeof data === 'object' ? JSON.stringify(data) : '"' + data + '"';
+    data = JSON.stringify(data);    // calling stringify for all types of data. Because if data is a string containing ", we need to escape that. Ref: https://github.com/shripalsoni04/nativescript-webview-interface/pull/6
     return 'window.nsWebViewInterface._onNativeEvent("' + eventName + '",' + data + ');'
 };
 
