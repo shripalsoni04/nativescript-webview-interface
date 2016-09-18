@@ -173,6 +173,22 @@ WebViewInterface.prototype.destroy = function(){
     if(this._destroy) {
         this._destroy();
     }
+
+    /**
+     * 
+     * Resetting src to blank. This needs to be done to avoid issue of communication stops working from webView to nativescript when 
+     * page with webVeiw is opened on back button press on android.
+     * This issue occurs because nativescript destroys the native webView element on navigation if cache is disabled, and when we navigate back
+     * it recreates the native webView and attaches it to nativescript webView element. So we have to reinitiate this plugin with new webView instance.
+     * Now, to make communication from webVeiw to nativescript work on android, 
+     * androidJSInterface should be loaded before any request loads on webView. So if we don't reset src on nativescript webView, that src will start
+     * loading as soon as the native webView is created and before we add androidJSInterface. This results in stoppage of communication from webView 
+     * to nativescript when page is opened on back navigation.
+     */
+    if(this.webView) {
+        this.webView.src = '';
+    }
+
     this.eventListenerMap = null;
     this.jsCallReqIdSuccessCallbackMap = null;
     this.jsCallReqIdErrorCallbackMap = null;
