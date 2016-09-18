@@ -8,7 +8,7 @@
     
     function WebViewInterface(webView, src){
         _super.call(this, webView);
-        this._interceptCallsFromWebview();
+        this._listenWebViewLoadStarted();
         if(src){
             this.webView.src = src;
         }
@@ -21,21 +21,26 @@
      * to fetch result from webView as we cannot rely on url for large results.
      * 
      */
-    WebViewInterface.prototype._interceptCallsFromWebview = function(){
-        this.webView.on('loadStarted', function (args) {
-            var request = args.url;
-            var reqMsgProtocol = 'js2ios:';
-            var reqMsgStartIndex = request.indexOf(reqMsgProtocol);
-            if (reqMsgStartIndex === 0) {
-                var reqMsg = decodeURIComponent(request.substring(reqMsgProtocol.length, request.length));
-                var oReqMsg = common.parseJSON(reqMsg);
-                if(oReqMsg){
-                    var eventName = oReqMsg.eventName;
-                    var data = this._executeJS('window.nsWebViewInterface._getIOSResponse('+oReqMsg.resId+')');
-                    this._onWebViewEvent(eventName, data);    
-                }
+    WebViewInterface.prototype._interceptCallsFromWebview = function (args) {
+        var request = args.url;
+        var reqMsgProtocol = 'js2ios:';
+        var reqMsgStartIndex = request.indexOf(reqMsgProtocol);
+        if (reqMsgStartIndex === 0) {
+            var reqMsg = decodeURIComponent(request.substring(reqMsgProtocol.length, request.length));
+            var oReqMsg = common.parseJSON(reqMsg);
+            if(oReqMsg){
+                var eventName = oReqMsg.eventName;
+                var data = this._executeJS('window.nsWebViewInterface._getIOSResponse('+oReqMsg.resId+')');
+                this._onWebViewEvent(eventName, data);
             }
-        }.bind(this)); 
+        }
+    };
+
+    /**
+     * Attaches loadStarted event listener on webView to intercept calls and process them.
+     */
+    WebViewInterface.prototype._listenWebViewLoadStarted = function(){
+        this.webView.on('loadStarted', this._interceptCallsFromWebview, this); 
     }
     
     /**
@@ -43,6 +48,13 @@
      */
     WebViewInterface.prototype._executeJS = function(strJSFunction){
         return this.webView.ios.stringByEvaluatingJavaScriptFromString(strJSFunction);
+    };
+
+    /**
+     * Removes loadStarted event listener.
+     */
+    WebViewInterface.prototype._destroy = function () {
+        this.webView.off('loadStarted', this._interceptCallsFromWebview, this);
     };
     
     return WebViewInterface;

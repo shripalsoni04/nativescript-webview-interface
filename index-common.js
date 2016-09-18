@@ -169,6 +169,10 @@ WebViewInterface.prototype.callJSFunction = function (functionName, args, succes
  * This needs to be called in navigatedFrom event handler in page where webviewInterface plugin is used.
  */
 WebViewInterface.prototype.destroy = function(){
+    // call platform specific destroy function if available. Currently used only for iOS to remove loadStarted event listener.
+    if(this._destroy) {
+        this._destroy();
+    }
     this.eventListenerMap = null;
     this.jsCallReqIdSuccessCallbackMap = null;
     this.jsCallReqIdErrorCallbackMap = null;
