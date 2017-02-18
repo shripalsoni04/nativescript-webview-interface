@@ -43,6 +43,18 @@
      * Initializes webView for communication between android and webView.
      */
     WebViewInterface.prototype._initWebView = function(src){
+        var _this = this;
+        if(this.webView.isLoaded) {
+            _this._setAndroidWebViewSettings(src);
+        } else {
+            var handlerRef = _this.webView.on('loaded', function(){
+                _this._setAndroidWebViewSettings(src);
+                _this.webView.off('loaded', handlerRef);
+            });
+        }
+    };
+    
+    WebViewInterface.prototype._setAndroidWebViewSettings = function(src) {
         var oJSInterface =  getAndroidJSInterface(this);
         var androidSettings = this.webView.android.getSettings();
         androidSettings.setJavaScriptEnabled(true);
@@ -54,8 +66,8 @@
         if(src){
             this.webView.src = src;
         }
-    };
-    
+    }
+
     /**
      * Executes event/command/jsFunction in webView.
      */
