@@ -72,7 +72,7 @@
      * Executes event/command/jsFunction in webView.
      */
     WebViewInterface.prototype._executeJS = function(strJSFunction){
-        var url = 'javascript:'+strJSFunction;
+        var url = 'javascript:' + encodeURIComponent(strJSFunction);
         this.webView.android.loadUrl(url);
     };
     
