@@ -1,5 +1,6 @@
- var common = require("./index-common");
- 
+ const common = require("./index-common");
+ const platformModule = require("platform");
+
  global.moduleMerge(common, exports);
  
  /**
@@ -72,8 +73,12 @@
      * Executes event/command/jsFunction in webView.
      */
     WebViewInterface.prototype._executeJS = function(strJSFunction){
-        var url = 'javascript:'+strJSFunction;
-        this.webView.android.loadUrl(url);
+      if (platformModule.device.sdkVersion >= 19) {
+        this.webView.android.evaluateJavascript(strJSFunction, null);
+      }
+      else {
+        this.webView.android.loadUrl('javascript:'+strJSFunction);
+      }
     };
     
     return WebViewInterface;
