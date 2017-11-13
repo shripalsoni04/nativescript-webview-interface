@@ -72,8 +72,11 @@
      * Executes event/command/jsFunction in webView.
      */
     WebViewInterface.prototype._executeJS = function(strJSFunction){
-        var url = 'javascript:'+strJSFunction;
-        this.webView.android.loadUrl(url);
+        this.webView.android.evaluateJavascript(strJSFunction, new android.webkit.ValueCallback({
+            onReceiveValue: function(value) {
+                console.log(value);
+            }
+        }));
     };
     
     return WebViewInterface;
