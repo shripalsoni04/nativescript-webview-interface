@@ -8,6 +8,16 @@
     
     function WebViewInterface(webView, src){
         _super.call(this, webView);
+
+        /**
+         * Since NativeScript v3.4.0 the UI component WebView is using WKWebView which broke this plugin.
+         * This property is used to overcome this issue and maintain compatibility with older versions of NativeScript.
+         *
+         * @see https://github.com/shripalsoni04/nativescript-webview-interface/issues/22
+         *
+         */
+        this.isUsingWKWebView = this.webView.ios.constructor.name === "WKWebView";
+
         this._listenWebViewLoadStarted();
         if(src){
             this.webView.src = src;
@@ -30,8 +40,8 @@
             var oReqMsg = common.parseJSON(reqMsg);
             if(oReqMsg){
                 var eventName = oReqMsg.eventName;
-                var data = this._executeJS('window.nsWebViewInterface._getIOSResponse('+oReqMsg.resId+')');
-                this._onWebViewEvent(eventName, data);
+                this._executeJS('window.nsWebViewInterface._getIOSResponse('+oReqMsg.resId+')')
+                    .then(data => this._onWebViewEvent(eventName, data));
             }
         }
     };
@@ -46,8 +56,14 @@
     /**
      * Executes event/command/jsFunction in webView.
      */
-    WebViewInterface.prototype._executeJS = function(strJSFunction){
-        return this.webView.ios.stringByEvaluatingJavaScriptFromString(strJSFunction);
+    WebViewInterface.prototype._executeJS = function(strJSFunction) {
+        return new Promise((resolve) => {
+            if (this.isUsingWKWebView) {
+                this.webView.ios.evaluateJavaScriptCompletionHandler(strJSFunction, (data) => resolve(data));
+            } else {
+                resolve(this.webView.ios.stringByEvaluatingJavaScriptFromString(strJSFunction));
+            }
+        });
     };
 
     /**
