@@ -1,6 +1,6 @@
 {
   "name": "nativescript-webview-interface",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Nativescript plugin for bi-directional communication between webView and android/ios.",
   "main": "index",
   "typings": "index.d.ts",
