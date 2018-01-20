@@ -41,7 +41,12 @@
             if(oReqMsg){
                 var eventName = oReqMsg.eventName;
                 this._executeJS('window.nsWebViewInterface._getIOSResponse('+oReqMsg.resId+')')
-                    .then(data => this._onWebViewEvent(eventName, data));
+                    .then(function(data) {
+                        this._onWebViewEvent(eventName, data);
+                    }.bind(this))
+                    .catch(function(error) {
+                        throw error;
+                    });
             }
         }
     };
@@ -57,13 +62,19 @@
      * Executes event/command/jsFunction in webView.
      */
     WebViewInterface.prototype._executeJS = function(strJSFunction) {
-        return new Promise((resolve) => {
+        return new Promise(function(resolve, reject) {
             if (this.isUsingWKWebView) {
-                this.webView.ios.evaluateJavaScriptCompletionHandler(strJSFunction, (data) => resolve(data));
+                this.webView.ios.evaluateJavaScriptCompletionHandler(strJSFunction, function(data, error) {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(data);
+                    }
+                });
             } else {
                 resolve(this.webView.ios.stringByEvaluatingJavaScriptFromString(strJSFunction));
             }
-        });
+        }.bind(this));
     };
 
     /**
