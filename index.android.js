@@ -14,7 +14,9 @@
         onWebViewEvent: function(webViewId, eventName, jsonData){
             // getting webviewInterface object by webViewId from static map.
             var oWebViewInterface = getWebViewIntefaceObjByWebViewId(webViewId);
-            oWebViewInterface._onWebViewEvent(eventName, jsonData);
+            if (oWebViewInterface) {
+                oWebViewInterface._onWebViewEvent(eventName, jsonData);
+            }
         }
     });
     
