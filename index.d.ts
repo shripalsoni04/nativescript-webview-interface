@@ -1,4 +1,4 @@
-import {WebView} from 'ui/web-view';
+import {WebView} from 'tns-core-modules/ui/web-view';
 
 /**
  * WebViewInterface Class containing common functionalities for Android and iOS
