@@ -148,6 +148,24 @@ var NSWebViewinterface = (function () {
     };
     
     /**
+     * Removes handler for android/ios event/command. If handler is not provided, all handlers for provided
+     * event will be removed
+     */
+    NSWebViewinterface.prototype.off = function (eventName, callback) {
+        if (!this.eventListenerMap[eventName] || this.eventListenerMap[eventName].length === 0) {
+            return;
+        }
+
+        if (callback) {
+            this.eventListenerMap[eventName] = this.eventListenerMap[eventName].filter(function(oldCallback) {
+                return oldCallback !== callback;
+            });
+        } else {
+            delete this.eventListenerMap[eventName];
+        }
+    };
+    
+    /**
      * Emits event to android/ios
      */
     NSWebViewinterface.prototype.emit = function (eventName, data) {
