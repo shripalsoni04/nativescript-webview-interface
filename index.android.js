@@ -1,5 +1,5 @@
  const common = require("./index-common");
- import { device } from "@nativescript/core"
+ const device = require("@nativescript/core").Device;
 
  global.moduleMerge(common, exports);
 
