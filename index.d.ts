@@ -1,4 +1,4 @@
-import {WebView} from 'tns-core-modules/ui/web-view';
+import { WebView } from "@nativescript/core";
 
 /**
  * WebViewInterface Class containing common functionalities for Android and iOS
@@ -7,7 +7,7 @@ export class WebViewInterface {
   /**
    * Creates instance of WebViewInterface
    * @param {WebView} webView Instance of nativescript web-view with which you want to create interface
-   * @param {string}  src URL/local path to be loaded in web-view. If it is set, then you don't need to set it in src attribute in xml/html file. For proper functioning of web-view to native communication on all device's it is recommended to set src here. 
+   * @param {string}  src URL/local path to be loaded in web-view. If it is set, then you don't need to set it in src attribute in xml/html file. For proper functioning of web-view to native communication on all device's it is recommended to set src here.
    */
   constructor(webView: WebView, src?: string);
 
@@ -37,7 +37,7 @@ export class WebViewInterface {
    * @param   {string}    functionName  Function should be in global scope in webView
    * @param   {any[]}     args  Arguments of the function
    * @param   {function}  successHandler  Function to call on result from webView
-   * @param   {function}  errorHandler  Function to call on error from webView      
+   * @param   {function}  errorHandler  Function to call on error from webView
    */
   callJSFunction(functionName: string, args?: any[], successHandler?: (response: any) => void, errorHandler?: (response: any) => void): void;
 

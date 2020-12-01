@@ -3,23 +3,23 @@
  */
 var NSWebViewinterface = (function () {
     function NSWebViewinterface() {
-        
+
         /**
          * Mapping of native eventName and its handler in webView
          */
         this.eventListenerMap = {};
-        
+
         /**
          * Mapping of JS Call responseId and result for iOS
          */
         this._iosResponseMap = {};
-        
+
         /**
          * Counter of iOS JS Call responseId
          */
         this._iosCntResponseId = 0;
     }
-    
+
     /**
      * Handles events/commands emitted by android/ios. This function is called from nativescript.
      * @param   {string}    eventName - Native event/command name
@@ -36,13 +36,13 @@ var NSWebViewinterface = (function () {
             }
         }
     };
-    
+
    /**
      * Handles JS function calls by android/ios. This function is called from nativescript.
      * Result value of JS function call can be promise or any other data.
      * @param   {number}    reqId - Internal communication id
      * @param   {string}    functionName - Function to be executed in webView
-     * @param   {any[]}     args  
+     * @param   {any[]}     args
      */
     NSWebViewinterface.prototype._callJSFunction = function (reqId, functionName, args) {
         var _this = this;
@@ -61,13 +61,13 @@ var NSWebViewinterface = (function () {
             }
         }
     }
-    
+
     /**
      * Resolves a function, if the function to be executed is in deep object chain.
-     * e.g If we want to execute a function 'parent.child.child.fn' from native app, 
-     * this function will extract fn from the object chain. 
-     * We can do it by using eval also, but as there is a way, why to invite unknown security risks? 
-     * 
+     * e.g If we want to execute a function 'parent.child.child.fn' from native app,
+     * this function will extract fn from the object chain.
+     * We can do it by using eval also, but as there is a way, why to invite unknown security risks?
+     *
      */
     NSWebViewinterface.prototype._getResolvedFunction = function(functionName){
         if(functionName && (functionName = functionName.trim()).length){
@@ -79,12 +79,12 @@ var NSWebViewinterface = (function () {
                     fn = null;
                     break;
                 }
-                fn = fn[arrFnPath[i]]; 
+                fn = fn[arrFnPath[i]];
             }
             return fn;
         }
     }
-    
+
     /**
      * Returns JS Call response by emitting internal _jsCallRespone event
      */
@@ -96,9 +96,9 @@ var NSWebViewinterface = (function () {
         };
         this.emit('_jsCallResponse', oResponse);
     };
-    
+
     /**
-     * Creates temporary iFrame element to load custom url, for sending handshake message 
+     * Creates temporary iFrame element to load custom url, for sending handshake message
      * to iOS which is necessary to initiate data transfer from webView to iOS
      */
     NSWebViewinterface.prototype._createIFrame = function (src) {
@@ -108,7 +108,7 @@ var NSWebViewinterface = (function () {
         rootElm.appendChild(newFrameElm);
         return newFrameElm;
     };
-    
+
     /**
      * Sends handshaking signal to iOS using custom url, for sending event payload or JS Call response.
      * As iOS do not allow to send any data from webView. Here we are sending data in two steps.
@@ -122,7 +122,7 @@ var NSWebViewinterface = (function () {
         var iFrame = this._createIFrame(url);
         iFrame.parentNode.removeChild(iFrame);
     };
-    
+
     /**
      * Returns data to iOS. This function is called from iOS.
      */
@@ -131,14 +131,14 @@ var NSWebViewinterface = (function () {
         delete this._iosResponseMap[resId];
         return response;
     };
-    
+
     /**
      * Calls native android function to emit event and payload to android
      */
     NSWebViewinterface.prototype._emitEventToAndroid = function (eventName, data) {
         window.androidWebViewInterface.handleEventFromWebView(eventName, data);
     };
-    
+
     /**
      * Registers handlers for android/ios event/command
      */
@@ -146,7 +146,25 @@ var NSWebViewinterface = (function () {
         var lstListeners = this.eventListenerMap[eventName] || (this.eventListenerMap[eventName] = []);
         lstListeners.push(callback);
     };
-    
+
+    /**
+     * Removes handler for android/ios event/command. If handler is not provided, all handlers for provided
+     * event will be removed
+     */
+    NSWebViewinterface.prototype.off = function (eventName, callback) {
+        if (!this.eventListenerMap[eventName] || this.eventListenerMap[eventName].length === 0) {
+            return;
+        }
+
+        if (callback) {
+            this.eventListenerMap[eventName] = this.eventListenerMap[eventName].filter(function(oldCallback) {
+                return oldCallback !== callback;
+            });
+        } else {
+            delete this.eventListenerMap[eventName];
+        }
+    };
+
     /**
      * Emits event to android/ios
      */

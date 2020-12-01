@@ -1,11 +1,11 @@
  var common = require("./index-common");
- 
+
  /**
-  * iOS specific WebViewInterface Class 
-  */ 
+  * iOS specific WebViewInterface Class
+  */
  var WebViewInterface = (function(_super){
     __extends(WebViewInterface, _super);
-    
+
     function WebViewInterface(webView, src){
         _super.call(this, webView);
 
@@ -16,20 +16,24 @@
          * @see https://github.com/shripalsoni04/nativescript-webview-interface/issues/22
          *
          */
-        this.isUsingWKWebView = this.webView.ios.constructor.name === "WKWebView";
+        if (this.webView.ios) {
+            this.isUsingWKWebView = this.webView.ios.constructor.name === "WKWebView";
+        } else {
+            this.isUsingWKWebView = true;
+        }
 
         this._listenWebViewLoadStarted();
         if(src){
             this.webView.src = src;
         }
     }
-    
+
     /**
      * Intercepts all requests from webView and processes requests with js2ios: protocol.
-     * Communication from webView to iOS is done by custom urls. 
-     * e.g js2ios:{"eventName": "anyEvent", "resId": number}. Here resId is used as unique message id 
+     * Communication from webView to iOS is done by custom urls.
+     * e.g js2ios:{"eventName": "anyEvent", "resId": number}. Here resId is used as unique message id
      * to fetch result from webView as we cannot rely on url for large results.
-     * 
+     *
      */
     WebViewInterface.prototype._interceptCallsFromWebview = function (args) {
         var request = args.url;
@@ -55,9 +59,9 @@
      * Attaches loadStarted event listener on webView to intercept calls and process them.
      */
     WebViewInterface.prototype._listenWebViewLoadStarted = function(){
-        this.webView.on('loadStarted', this._interceptCallsFromWebview, this); 
+        this.webView.on('loadStarted', this._interceptCallsFromWebview, this);
     }
-    
+
     /**
      * Executes event/command/jsFunction in webView.
      */
@@ -83,8 +87,8 @@
     WebViewInterface.prototype._destroy = function () {
         this.webView.off('loadStarted', this._interceptCallsFromWebview, this);
     };
-    
+
     return WebViewInterface;
  })(common.WebViewInterface);
- 
+
  exports.WebViewInterface = WebViewInterface;
