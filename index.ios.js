@@ -46,7 +46,9 @@
                 var eventName = oReqMsg.eventName;
                 this._executeJS('window.nsWebViewInterface._getIOSResponse('+oReqMsg.resId+')')
                     .then(function(data) {
-                        this._onWebViewEvent(eventName, data);
+                        if(data) {
+                            this._onWebViewEvent(eventName, data);
+                        }
                     }.bind(this))
                     .catch(function(error) {
                         throw error;
