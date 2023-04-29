@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/shripalsoni04/nativescript-webview-interface",
   "devDependencies": {
-    "@nativescript/core": "8.4.7"
+    "@nativescript/core": "8.5.0"
   },
   "peerDependencies": {
-    "@nativescript/core": ">=8.4.0"
+    "@nativescript/core": ">=8.5.0"
   }
 }
