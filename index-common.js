@@ -115,9 +115,10 @@ WebViewInterface.prototype._onWebViewEvent = function (eventName, data) {
 WebViewInterface.prototype.on = function (eventName, callback) {
     if(eventName === '_jsCallResponse'){
         throw new Error('_jsCallResponse eventName is reserved for internal use. You cannot attach listeners to it.');    
+    }  
+    if (!this.eventListenerMap[eventName]) {
+        (this.eventListenerMap[eventName] || (this.eventListenerMap[eventName] = [])).push(callback);
     }
-    
-    (this.eventListenerMap[eventName] || (this.eventListenerMap[eventName] = [])).push(callback);
 };
 
 /**
