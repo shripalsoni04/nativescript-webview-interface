@@ -1,6 +1,6 @@
 {
   "name": "nativescript-webview-interface",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Nativescript plugin for bi-directional communication between webView and android/ios.",
   "main": "index",
   "typings": "index.d.ts",
@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/shripalsoni04/nativescript-webview-interface",
   "devDependencies": {
-    "@nativescript/core": "~7.0.3"
+    "@nativescript/core": "6.5.0"
   },
   "peerDependencies": {
-    "@nativescript/core": ">=6.0.0"
+    "@nativescript/core": ">=6.5.0"
   }
 }
