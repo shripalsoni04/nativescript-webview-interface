@@ -6,8 +6,8 @@
   "typings": "index.d.ts",
   "nativescript": {
     "platforms": {
-      "android": "8.6.0",
-      "ios": "8.6.0"
+      "android": "6.0.0",
+      "ios": "6.0.0"
     }
   },
   "repository": {
@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/shripalsoni04/nativescript-webview-interface",
   "devDependencies": {
-    "@nativescript/core": "8.6.1"
+    "@nativescript/core": "~7.0.3"
   },
   "peerDependencies": {
-    "@nativescript/core": ">=8.0.0"
+    "@nativescript/core": ">=6.0.0"
   }
 }
