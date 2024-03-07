@@ -70,13 +70,15 @@
     WebViewInterface.prototype._executeJS = function(strJSFunction) {
         return new Promise(function(resolve, reject) {
             if (this.isUsingWKWebView) {
-                this.webView.ios.evaluateJavaScriptCompletionHandler(strJSFunction, function(data, error) {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(data);
-                    }
-                });
+                if (this.webView && this.webView.ios && this.webView.ios.evaluateJavaScriptCompletionHandler) {
+                    this.webView.ios.evaluateJavaScriptCompletionHandler(strJSFunction, function(data, error) {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(data);
+                        }
+                    });
+                }
             } else {
                 resolve(this.webView.ios.stringByEvaluatingJavaScriptFromString(strJSFunction));
             }

@@ -1,6 +1,6 @@
 {
   "name": "nativescript-webview-interface",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Nativescript plugin for bi-directional communication between webView and android/ios.",
   "main": "index",
   "typings": "index.d.ts",
@@ -24,6 +24,13 @@
     "email": "shripalsoni04@gmail.com",
     "website": "www.shripalsoni.com"
   },
+  "contributors": [
+    {
+      "name": "Dave Coffin",
+      "email": "dave@davecoffin.com",
+      "website": "www.davecoffin.com"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/shripalsoni04/nativescript-webview-interface/issues"
   },
